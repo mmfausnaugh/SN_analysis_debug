@@ -23,6 +23,8 @@ for ifile in ifiles:
     f = np.load(ifile,allow_pickle=True)
     results = f['arr_0'].tolist()
     print(results['logz'])
+    weight = np.exp(results['logwt'] - results['logz'][-1])
+    print(np.c_[weight[0:10],weight[-10:]])
     #print()
     labels = ['First Light $t_0$',
               'Normalization C',
