@@ -110,3 +110,67 @@ class PL_Result(object):
                 
                 self.max_companion_params[p] = med
                 
+
+if __name__ == "__main__":
+    fit_times,fit_fluxes,fit_efluxes = np.genfromtxt('test_lc_2020tld.txt',unpack=1)
+    with open('test_2020tld_params.txt','r') as fin:
+        redshift = float(fin.readline())
+        first_light = float(fin.readline())
+
+    result = dnest_curved_powerlaw([fit_times],
+                                   [fit_fluxes],
+                                   [fit_efluxes],
+                                   redshift=redshift,
+                                   first_light = first_light,
+                                   fit_companion = False,
+                                   lc_interp_array = [] )
+
+    np.savez('test_2020tld_dynesty_results.npz',result)
+
+    PL_result = PL_Result( ['t_explosion',
+                            'norm',
+                            'index1',
+                            'index2',
+                            'baseline'],
+                           result,
+                           separations = [],
+                           radii = [])
+    PL_result.params['redshift'] = ResultParam(float(metadata['z']),
+                                                       0,0,0)
+    PL_result.max_companion_params['redshift'] = float(metadata['z'])
+    
+    s2_offset_fit1 = 0
+
+    with open('test_params.txt','w') as fout:
+        logz      = PL_results[ii].logz[-1]
+        logzerr   = PL_results[ii].logzerr[-1]
+        PL_norm   = PL_results[ii].params['norm'].value
+        PL_t_exp  = PL_results[ii].params['t_explosion'].value
+        PL_index1  = PL_results[ii].params['index1'].value
+        PL_index2  = PL_results[ii].params['index2'].value
+        PL_enorm   = PL_results[ii].params['norm'].stderr
+        PL_et_exp  = PL_results[ii].params['t_explosion'].stderr
+        PL_eindex1  = PL_results[ii].params['index1'].stderr
+        PL_eindex2  = PL_results[ii].params['index2'].stderr
+
+        PL_baseline = PL_results[ii].params['baseline'].value
+        PL_ebaseline = PL_results[ii].params['baseline'].stderr
+
+        if 'offset' in PL_results[ii].params.keys():
+            PL_offset = PL_results[ii].params['offset'].value
+            PL_eoffset = PL_results[ii].params['offset'].stderr
+        else:
+            PL_offset = 0.0
+            PL_eoffset = 0.0
+        fout.write('{:25s}{:15.2f}\n'.format('logz',logz))
+        fout.write('{:25s}{:15.2f}\n'.format('logzerr',logzerr))
+        fout.write('{:25s}{:15.2f}\n'.format('normalization',PL_norm))
+        fout.write('{:25s}{:15.2f}\n'.format('explosion_time',PL_t_exp))
+        fout.write('{:25s}{:15.2f}\n'.format('power_law_index1',PL_index1))
+        fout.write('{:25s}{:15.2f}\n'.format('power_law_index2',PL_index2))
+        fout.write('{:25s}{:15.2f}\n'.format('baseline',PL_baseline))
+        fout.write('{:25s}{:15.2f}\n'.format('error_normalization',PL_enorm))
+        fout.write('{:25s}{:15.2f}\n'.format('error_explosion_time',PL_et_exp))
+        fout.write('{:25s}{:15.2f}\n'.format('error_power_law_index1',PL_eindex1))
+        fout.write('{:25s}{:15.2f}\n'.format('error_power_law_index2',PL_eindex2))
+        fout.write('{:25s}{:15.2f}\n'.format('error_baseline',PL_ebaseline))
