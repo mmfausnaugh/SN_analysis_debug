@@ -143,7 +143,7 @@ if __name__ == "__main__":
     
     s2_offset_fit1 = 0
 
-    with open('test_params_2020tld.txt','w') as fout:
+    with open('test_output_2020tld.txt','w') as fout:
         logz      = PL_result.logz[-1]
         logzerr   = PL_result.logzerr[-1]
         PL_norm   = PL_result.params['norm'].value
@@ -200,6 +200,8 @@ if __name__ == "__main__":
                                    fit_companion = False,
                                    lc_interp_array = [] )
 
+    np.savez('test_2022exc_dynesty_results.npz',result)
+    
     PL_result = PL_Result( ['t_explosion',
                             'norm',
                             'index1',
@@ -214,7 +216,7 @@ if __name__ == "__main__":
     
     s2_offset_fit1 = 0
 
-    with open('test_params_2022exc.txt','w') as fout:
+    with open('test_output_2022exc.txt','w') as fout:
         logz      = PL_result.logz[-1]
         logzerr   = PL_result.logzerr[-1]
         PL_norm   = PL_result.params['norm'].value
