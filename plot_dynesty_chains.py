@@ -33,15 +33,15 @@ for ifile in ifiles:
               'Background $f_0$']
 
     ndim = np.shape(results['samples'])[1]
-    if 'no_companion' in ifile:
-        if ndim == 6:
-            labels.append(['S2 Offset'])
-    else:
-        if ndim == 6:
-            labels.append(['Companion Index'])
-        elif ndim == 7:
-            labels.append(['S2 Offset'])
-            labels.append(['Companion Index'])
+    #if 'no_companion' in ifile:
+    if ndim == 6:
+        labels.append(['S2 Offset'])
+#    else:
+#        if ndim == 6:
+#            labels.append(['Companion Index'])
+#        elif ndim == 7:
+#            labels.append(['S2 Offset'])
+#            labels.append(['Companion Index'])
     
     fig,axes = dyplot.cornerplot(results,
                                  #show_titles=True,
