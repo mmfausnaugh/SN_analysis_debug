@@ -16,7 +16,8 @@ import SN_model_fits.result_params as result_params
 
 from SN_model_fits.kasen_2010 import *
 
-                
+
+np.random.seed(1010101)
 
 if __name__ == "__main__":
 
