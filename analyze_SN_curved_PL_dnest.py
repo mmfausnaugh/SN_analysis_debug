@@ -199,4 +199,4 @@ if __name__ == "__main__":
         print('There may be an issue, posterior distribution'
               ' seems too narrow, with standard deviation of'
               ' t explosion = {}, should be greater than 0.1'.format(
-                  PL_reult.params['t_explosion'].stderr))
+                  PL_result.params['t_explosion'].stderr))
