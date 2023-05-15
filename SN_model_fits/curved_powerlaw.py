@@ -296,7 +296,7 @@ def mcmc_curved_powerlaw_to_single_sector(times, fluxes,efluxes, redshift = 0,
                                           discard=25000):
 
 
-    np.random.seed(101010)
+    np.random.seed(1010102)
     #times,fluxes, efluxes should be lists with a single element, the
     #array of values to fit
     time0 = times[0]
@@ -387,11 +387,11 @@ def mcmc_curved_powerlaw_to_single_sector(times, fluxes,efluxes, redshift = 0,
 
 
 
-def dnest_curved_powerlaw(times, fluxes,efluxes, redshift = 0,
-                          fixed_t_exp = None,
-                          first_light = None,
-                          fit_companion=False,
-                          lc_interp_array=[]):
+def prepare_data(times, fluxes,efluxes, redshift = 0,
+                 fixed_t_exp = None,
+                 first_light = None,
+                 fit_companion=False,
+                 lc_interp_array=[]):
 
 
     #times,fluxes, efluxes should be lists with a single element, the
@@ -506,28 +506,12 @@ def dnest_curved_powerlaw(times, fluxes,efluxes, redshift = 0,
         error_norm = np.sum(np.log( np.r_[eflux0[0], eflux0[1]]))
     else:
         error_norm = np.sum(np.log( eflux0[0] ))
-    dsampler = dynesty.DynamicNestedSampler(log_likelihood, prior_transform, ndim,
-                                            logl_args=[func_use,
-                                                       time0, flux0, eflux0,
-                                                       redshift, labels, lc_interp_array,
-                                                       error_norm])
 
-    #dsampler.run_nested(maxiter=10)
+    return log_likelihood, prior_transform, ndim,\
+        func_use, time0, flux0, eflux0, \
+        redshift, labels, lc_interp_array,\
+        error_norm
 
-    #2020bj goes to .003% efficiency, and takes 2.5 days if no
-    #constraint picked this value based on 2018hsz, which had the
-    #largest .npz chain file on disk
-    dsampler.run_nested(maxcall=3.e6)
-    res = dsampler.results
-#    print(res.keys())
-#    res.summary()    
-#    fig, axes = dyplot.runplot(res)
-#    dyplot.traceplot(res,show_titles=True,smooth=200)
-    
-#    dyplot.cornerplot(res, show_titles=True,smooth=200)
-#    plt.show()
-    
-    return res
 
 
 

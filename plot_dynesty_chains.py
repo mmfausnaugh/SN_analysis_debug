@@ -25,7 +25,7 @@ for ifile in ifiles:
     print(results['logz'])
     weight = np.exp(results['logwt'] - results['logz'][-1])
     print(np.c_[weight[0:10],weight[-10:]])
-    #print()
+    print(max(weight) )
     labels = ['First Light $t_0$',
               'Normalization C',
               'PL Index $\\beta_1$',
@@ -35,7 +35,7 @@ for ifile in ifiles:
     ndim = np.shape(results['samples'])[1]
     #if 'no_companion' in ifile:
     if ndim == 6:
-        labels.append(['S2 Offset'])
+        labels.append('S2 Offset')
 #    else:
 #        if ndim == 6:
 #            labels.append(['Companion Index'])
@@ -45,7 +45,7 @@ for ifile in ifiles:
     
     fig,axes = dyplot.cornerplot(results,
                                  #show_titles=True,
-                                 smooth=50, #defines Nbins
+                                 #smooth=4, #defines Nbins
                                  labels=labels,
                                  show_titles=False)
 
